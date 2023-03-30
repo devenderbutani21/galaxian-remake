@@ -24,6 +24,18 @@ class ScrollingBackground:
             self.coord[1] = self.y_original
             self.coord2[1] = self.y2_original
 
+class HeroShip:
+    def __init__(self, screenheight, screenwidth, imagefile):
+        self.shape = pg.image.load(imagefile)
+        self.top = screenheight - self.shape.get_height()
+        self.left = screenwidth/2 - self.shape.get_width()/2
+    
+    def Show(self,surface):
+        surface.blit(self.shape, (self.left, self.top))
+    
+    def UpdateCoords(self,x):
+        self.left = x - self.shape.get_width()/2
+
 clock = pg.time.Clock()
 
 screenwidth, screenheight = (480, 600)
@@ -46,6 +58,8 @@ pg.mouse.set_visible(0)
 
 pg.display.set_caption('Galaxian Remake')
 
+Hero = HeroShip(screenheight, screenwidth, "ship.png")
+
 while True:
     time = clock.tick(framerate)/1000.0
 
@@ -58,4 +72,8 @@ while True:
     StarField.UpdateCoords(bg_speed, time)
 
     StarField.Show(screen)
+
+    Hero.UpdateCoords(x)
+
+    Hero.Show(screen)
     pg.display.update()
